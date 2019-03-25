@@ -2,12 +2,18 @@ package com.mksoft.memoalarmapp.component.activity.fragment.memoBody;
 
 import android.content.DialogInterface;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.LayoutInflater;
+import android.view.Menu;
+import android.view.MenuInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
+import android.widget.Toast;
 
 import com.mksoft.memoalarmapp.DB.MemoReposityDB;
+import com.mksoft.memoalarmapp.DB.data.OptionData;
 import com.mksoft.memoalarmapp.ViewModel.MemoViewModel;
 import com.mksoft.memoalarmapp.component.activity.MainActivity;
 import com.mksoft.memoalarmapp.R;
@@ -26,7 +32,6 @@ import androidx.recyclerview.widget.ItemTouchHelper;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 import dagger.android.support.AndroidSupportInjection;
-
 
 public class MemoBodyFragment extends Fragment {
     public MemoBodyFragment(){
@@ -49,6 +54,7 @@ public class MemoBodyFragment extends Fragment {
     ItemTouchHelper itemTouchHelper;
     @Inject
     ViewModelProvider.Factory viewModelFactory;
+
     @Inject
     MemoReposityDB memoReposityDB;
 
@@ -58,11 +64,37 @@ public class MemoBodyFragment extends Fragment {
     @Override
     public void onActivityCreated(@Nullable Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
-        this.configureDagger();
+
         this.configureViewModel();
 
     }
+
+    @Override
+    public void onCreate(@Nullable Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        this.configureDagger();
+        setHasOptionsMenu(true);
+    }
+
+    @Override
+    public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
+        super.onCreateOptionsMenu(menu, inflater);
+        inflater.inflate(R.menu.menu, menu);
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        switch (item.getItemId()){
+            case R.id.action_setting:
+                Toast.makeText(getContext(), "setting page", Toast.LENGTH_SHORT).show();
+                mainActivity.OnFragmentChange(3,null);
+                return true;
+            default:
+                return super.onOptionsItemSelected(item);
+        }
+    }
     private void configureDagger(){
+
         AndroidSupportInjection.inject(this);
     }
     private void configureViewModel(){
@@ -87,6 +119,14 @@ public class MemoBodyFragment extends Fragment {
     }
 
     private void init(ViewGroup rootView){
+        if(memoReposityDB.getOptionData() == null){
+            OptionData optionData = new OptionData();
+            optionData.setSleepStartTime(23);
+            optionData.setSleepEndTime(9);
+            memoReposityDB.insertOption(optionData);
+
+        }
+
 
         mainActivity = (MainActivity) getActivity();
         recyclerView = (RecyclerView)rootView.findViewById(R.id.memoListRecyclerView);

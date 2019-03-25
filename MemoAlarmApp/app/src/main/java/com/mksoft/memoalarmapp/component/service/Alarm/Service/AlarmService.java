@@ -14,6 +14,7 @@ import android.os.IBinder;
 import android.util.Log;
 
 import com.mksoft.memoalarmapp.DB.MemoReposityDB;
+import com.mksoft.memoalarmapp.DB.data.OptionData;
 import com.mksoft.memoalarmapp.R;
 import com.mksoft.memoalarmapp.DB.data.MemoData;
 
@@ -42,6 +43,8 @@ public class AlarmService extends Service {
     String time;
 
 
+    OptionData optionData;
+
     @Inject
     MemoReposityDB memoReposityDB;
 
@@ -69,6 +72,7 @@ public class AlarmService extends Service {
         mFormat=new SimpleDateFormat("yyMMddkkmm");//날짜 형식 지정
 
         myServiceHandler handler = new myServiceHandler();
+
         thread = new AlarmServiceThread(handler);
         thread.start();
 
@@ -85,20 +89,47 @@ public class AlarmService extends Service {
 
     class myServiceHandler extends Handler {
 
+        private boolean CheckComfort(int hour, int comfortA, int comfortB) {
+            if (comfortA <= comfortB)
+                return comfortA <= hour && hour < comfortB;
+            else
+                return comfortA <= hour || hour < comfortB;
+        }
         public void checkNotify(MemoData memoData){
             String tempRandomTime = memoData.getRandomTime().substring(memoData.getRandomTime().length()-10,memoData.getRandomTime().length());
             Log.d("tempRT", tempRandomTime);
+            Log.d("tempRTraw", memoData.getRandomTime());
             if(tempRandomTime.length() != 0){
 
                 Calendar calendar = Calendar.getInstance();
                 time=mFormat.format(calendar.getTime());
 
+
+
                 Log.d("tempRT", time);
                 if(tempRandomTime.equals(time))
                 {
-                    Log.d("testHandler", "pass~");
-                    Notifi_M.notify(memoData.getId(), notification);
-                    memoData.setRandomTime(memoData.getRandomTime().substring(0, memoData.getRandomTime().length()-10));
+                    if(optionData != null){
+                        if (CheckComfort(Integer.parseInt(time.substring(6,8)),
+                                optionData.getSleepStartTime(), optionData.getSleepEndTime())){
+                            Notifi_M.notify(memoData.getId(), notification);
+                            memoData.setRandomTime(memoData.getRandomTime().substring(0, memoData.getRandomTime().length()-10));
+                            //방해금지 설정이 되어있고, 방해금지 설정 시간에 들어가면 노티파이를 소리없이 뛰어줌
+                        }else{
+                            notification.defaults = Notification.DEFAULT_SOUND;
+                            Log.d("testHandler", "pass~");
+                            Notifi_M.notify(memoData.getId(), notification);
+                            memoData.setRandomTime(memoData.getRandomTime().substring(0, memoData.getRandomTime().length()-10));
+                        }//방해금지 설정이 되어있고, 방해금지 설정 시간에 들어가지 않는 경우
+
+                    }else{
+                        notification.defaults = Notification.DEFAULT_SOUND;
+                        Log.d("testHandler", "pass~");
+                        Notifi_M.notify(memoData.getId(), notification);
+                        memoData.setRandomTime(memoData.getRandomTime().substring(0, memoData.getRandomTime().length()-10));
+                    }//방해금지 설정이 되어있지 않음.
+
+
                 }else{
                     Date current = null;
                     Date RT = null;
@@ -111,6 +142,7 @@ public class AlarmService extends Service {
                     int compare = current.compareTo(RT);
                     if(compare>0){
                         memoData.setRandomTime(memoData.getRandomTime().substring(0, memoData.getRandomTime().length()-10));
+                        //이미 지난 시간....
                     }else{
                         Log.d("tempRT", "finePass");
                     }
@@ -118,7 +150,7 @@ public class AlarmService extends Service {
 
                 }
                 if(memoData.getRandomTime().length() == 0){
-                    //서비스 종료
+
                     //디비에서 지우기
 
                     Log.d("DBdel", "it");
@@ -127,6 +159,7 @@ public class AlarmService extends Service {
 
                 }else{
                     memoReposityDB.insertMemo(memoData);
+                    //스트링 값을 갱신한 메모데이터를 insert하자.
                 }
             }
 
@@ -136,6 +169,9 @@ public class AlarmService extends Service {
         public void handleMessage(android.os.Message msg) {
             Log.d("testHandler", "running");
             memoDataList = memoReposityDB.getStaticMemoDataList();
+            optionData = memoReposityDB.getOptionData();
+            //startForeground(-1,null);
+            //stopForeground(true);
 
             if(Build.VERSION.SDK_INT >= Build.VERSION_CODES.O){
 
@@ -149,10 +185,7 @@ public class AlarmService extends Service {
                     notificationChannel.enableLights(true);
                     notificationChannel.setLightColor(Color.GREEN);
                     notificationChannel.enableVibration(true);
-//            notificationChannel.getSound();
-//            notificationChannel.setSound();
                     notificationChannel.setVibrationPattern(new long[]{100, 200, 100, 200});
-//            notificationChannel.setLockscreenVisibility(Notification.VISIBILITY_PRIVATE);
                     notificationChannel.setLockscreenVisibility(Notification.VISIBILITY_PUBLIC);
                     Notifi_M.createNotificationChannel(notificationChannel);
                     //인텐트에서 받은 메모 초기화 과정...
@@ -164,7 +197,7 @@ public class AlarmService extends Service {
                             .setAutoCancel(true)
                             .build();
 
-                    notification.defaults = Notification.DEFAULT_SOUND;
+
                     checkNotify(memoData);
 
 
@@ -180,9 +213,8 @@ public class AlarmService extends Service {
                             .setTicker("알림!!!")
                             .setSmallIcon(R.drawable.ic_announcement_black_24dp)
                             .build();
-//노티파이 통일 필요...
 
-                    notification.defaults = Notification.DEFAULT_SOUND;
+
 
                     //알림 소리를 한번만 내도록
                     notification.flags = Notification.FLAG_ONLY_ALERT_ONCE;
@@ -194,5 +226,6 @@ public class AlarmService extends Service {
             }
 
         }
-    };
+    }
+
 }

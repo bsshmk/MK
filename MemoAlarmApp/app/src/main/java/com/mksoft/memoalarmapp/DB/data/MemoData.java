@@ -35,11 +35,6 @@ public class MemoData implements Serializable {
     @ColumnInfo(name = "memo_title")
     private String memoTitle;
 
-    @ColumnInfo(name = "sleep_start_time")
-    private String sleepStartTime;
-
-    @ColumnInfo(name = "sleep_end_time")
-    private String sleepEndTime;
 
 
     @ColumnInfo(name = "random_time")
@@ -91,21 +86,6 @@ public class MemoData implements Serializable {
     }
 
 
-    public String getSleepStartTime() {
-        return sleepStartTime;
-    }
-
-    public void setSleepStartTime(String sleepStartTime) {
-        this.sleepStartTime = sleepStartTime;
-    }
-
-    public String getSleepEndTime() {
-        return sleepEndTime;
-    }
-
-    public void setSleepEndTime(String sleepEndTime) {
-        this.sleepEndTime = sleepEndTime;
-    }
 
     public String getMemoTitle() {
         return memoTitle;

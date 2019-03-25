@@ -1,31 +1,25 @@
 package com.mksoft.memoalarmapp.component.activity.fragment.memoTimeSetting;
 
-import android.app.DatePickerDialog;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
-import android.widget.EditText;
 import android.widget.NumberPicker;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.mksoft.memoalarmapp.DB.data.MemoData;
+import com.mksoft.memoalarmapp.R;
 import com.mksoft.memoalarmapp.ViewModel.MemoViewModel;
 import com.mksoft.memoalarmapp.component.activity.MainActivity;
-import com.mksoft.memoalarmapp.R;
-import com.mksoft.memoalarmapp.DB.data.MemoData;
 import com.mksoft.memoalarmapp.component.service.Alarm.RandomTimeMaker;
 
 import java.text.SimpleDateFormat;
-import java.util.ArrayList;
 import java.util.Calendar;
-import java.util.Collections;
-import java.util.Date;
 
 import javax.inject.Inject;
 
@@ -33,7 +27,6 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.app.AppCompatDialogFragment;
-import androidx.fragment.app.DialogFragment;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentManager;
 import androidx.lifecycle.ViewModelProvider;
@@ -65,7 +58,7 @@ public class MemoTimeSettingFragment extends Fragment {
 
     public static final int REQUEST_CODE = 11;
 
-    NumberPicker np1,np2,np3;
+    NumberPicker np1;
     final String[] values = {"하루 2~3회", "하루 1~2회", "주 6~7회", "주 3회 미만"};
     final int[] intervals = {3,5,12,24};
 
@@ -159,21 +152,12 @@ public class MemoTimeSettingFragment extends Fragment {
         deadLine = notChanged;
 
         np1 = (NumberPicker) rootView.findViewById(R.id.np1);
-        np2 = (NumberPicker) rootView.findViewById(R.id.np2);
-        np3 = (NumberPicker) rootView.findViewById(R.id.np3);
 
         np1.setMinValue(0);
         np1.setMaxValue(values.length - 1);
         np1.setDisplayedValues(values);
         np1.setValue(0);
 
-        np2.setMinValue(0);
-        np2.setMaxValue(23);
-        np2.setValue(23);
-
-        np3.setMinValue(0);
-        np3.setMaxValue(23);
-        np3.setValue(9);
 
         mFormat=new SimpleDateFormat("yy-MM-dd kk:mm");//날짜 형식 지정
 
@@ -210,24 +194,20 @@ public class MemoTimeSettingFragment extends Fragment {
         });
 
         MD.setMinTime(Integer.toString(makeInterval(interval)));
-        MD.setSleepStartTime(Integer.toString(np2.getValue()));
-        MD.setSleepEndTime(Integer.toString(np3.getValue()));
 
 
 
         MD.setRandomTime(new RandomTimeMaker().Randomize(
                 deadLine,
                 time,
-                Integer.parseInt(MD.getMinTime())*60,
-                Integer.parseInt(MD.getSleepStartTime()),
-                Integer.parseInt(MD.getSleepEndTime())));//수면 시작은 시간만
+                Integer.parseInt(MD.getMinTime())*60));//수면 시작은 시간만
 
 
 
-        //MD.setRandomTime("19031819591903181954");//수면 시작은 시간만
+        //MD.setRandomTime("19032022161903202215");//수면 시작은 시간만
 
 
-        //년도가 너무 커지면 생성되는 랜덤사이즈가 너무 커진다.
+           //년도가 너무 커지면 생성되는 랜덤사이즈가 너무 커진다.
         memoViewModel.insertMemoData(MD);
         changeFragment(0);
 

@@ -6,8 +6,7 @@ import android.app.Service;
 import android.content.Context;
 
 
-import com.mksoft.memoalarmapp.DI
-        .DaggerAppComponent;
+import com.mksoft.memoalarmapp.DI.DaggerAppComponent;
 
 import javax.inject.Inject;
 

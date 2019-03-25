@@ -48,54 +48,26 @@
         android:orientation="horizontal"
         android:layout_below="@+id/dateTextView"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content">
+        android:layout_height="wrap_content"
+        >
 
         <LinearLayout
-            android:padding="10dp"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
             android:orientation="vertical"
-            android:layout_width="wrap_content"
-            android:layout_height="match_parent">
+            android:gravity="center"
+            android:padding="10dp">
+
             <TextView
-                android:text="interval"
                 android:layout_width="wrap_content"
-                android:layout_height="wrap_content" />
+                android:layout_height="wrap_content"
+                android:text="interval" />
+
             <NumberPicker
                 android:id="@+id/np1"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:minWidth="100dp"></NumberPicker>
-        </LinearLayout>
-
-        <LinearLayout
-            android:padding="10dp"
-            android:orientation="vertical"
-            android:layout_width="wrap_content"
-            android:layout_height="match_parent">
-            <TextView
-                android:text="sleep start"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content" />
-            <NumberPicker
-                android:id="@+id/np2"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content">
-            </NumberPicker>
-        </LinearLayout>
-
-        <LinearLayout
-            android:padding="10dp"
-            android:orientation="vertical"
-            android:layout_width="wrap_content"
-            android:layout_height="match_parent">
-            <TextView
-                android:text="sleep end"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content" />
-            <NumberPicker
-                android:id="@+id/np3"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content">
-            </NumberPicker>
         </LinearLayout>
 
     </LinearLayout>

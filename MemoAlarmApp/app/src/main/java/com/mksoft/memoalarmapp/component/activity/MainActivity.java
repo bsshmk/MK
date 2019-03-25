@@ -4,6 +4,7 @@ package com.mksoft.memoalarmapp.component.activity;
 import android.content.Intent;
 import android.os.Bundle;
 
+import com.mksoft.memoalarmapp.component.activity.fragment.MemoOverallSetting.MemoOverallSettingFragment;
 import com.mksoft.memoalarmapp.component.service.Alarm.Service.AlarmService;
 import com.mksoft.memoalarmapp.HideKeyboard;
 import com.mksoft.memoalarmapp.R;
@@ -28,6 +29,8 @@ public class MainActivity extends AppCompatActivity  implements HasSupportFragme
     MemoTimeSettingFragment memoTimeSettingFragment;//플레그먼트 주입이 될까?
     HideKeyboard hideKeyboard;
     public static MainActivity mainActivity;
+    MemoOverallSettingFragment memoOverallSettingFragment;
+
     @Inject
     DispatchingAndroidInjector<Fragment> dispatchingAndroidInjector;
 
@@ -55,6 +58,7 @@ public class MainActivity extends AppCompatActivity  implements HasSupportFragme
         memoBodyFragment = new MemoBodyFragment();
         memoAddFragment = new MemoAddFragment();
         memoTimeSettingFragment = new MemoTimeSettingFragment();
+        memoOverallSettingFragment = new MemoOverallSettingFragment();
         getSupportFragmentManager().beginTransaction().replace(R.id.mainContainer, memoBodyFragment).commit();
     }
     public void OnFragmentChange(int idx, Bundle bundle){
@@ -66,6 +70,8 @@ public class MainActivity extends AppCompatActivity  implements HasSupportFragme
             memoTimeSettingFragment.setArguments(bundle);
             getSupportFragmentManager().beginTransaction().replace(R.id.mainContainer, memoTimeSettingFragment).commit();
 
+        }else if(idx == 3){
+            getSupportFragmentManager().beginTransaction().replace(R.id.mainContainer, memoOverallSettingFragment).commit();
         }
     }
 

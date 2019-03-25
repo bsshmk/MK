@@ -9,8 +9,7 @@ public class RandomTimeMaker {
     int[] days = {0, 31, 28, 31, 30, 31, 30, 31, 31, 30, 31, 30, 31};
 
     public String Randomize(String deadline,
-                                        String startingTime, int min_interval,
-                                        int comfort_hourA, int comfort_hourB) {
+                                        String startingTime, int min_interval) {
         // 알람이 울리는 연도, 달, 날짜, 시간, 분
         String timeList = new String();
 
@@ -71,8 +70,7 @@ public class RandomTimeMaker {
             }
 
             // 알람 금지 시간
-            if (CheckComfort(hour, comfort_hourA, comfort_hourB)) continue;
-
+            //
             String str = new String();
             str += String.format("%02d", now_year)  + String.format("%02d", now_month)  + String.format("%02d", now_day)
                     + String.format("%02d", hour)  + String.format("%02d", min);
@@ -82,12 +80,7 @@ public class RandomTimeMaker {
         return timeList;
     }
 
-    private boolean CheckComfort(int hour, int comfortA, int comfortB) {
-        if (comfortA <= comfortB)
-            return comfortA <= hour && hour < comfortB;
-        else
-            return comfortA <= hour || hour < comfortB;
-    }
+
 
     private int MakeInterval(int min_interval) {
         double rand = Math.random();
