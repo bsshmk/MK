@@ -28,6 +28,7 @@ import java.util.List;
 import javax.inject.Inject;
 
 import androidx.annotation.RequiresApi;
+import androidx.core.app.NotificationCompat;
 import dagger.android.AndroidInjection;
 
 public class AlarmService extends Service {
@@ -89,12 +90,30 @@ public class AlarmService extends Service {
 
     class myServiceHandler extends Handler {
 
+        private NotificationCompat.Builder makeFakeNotification(){
+            NotificationCompat.Builder notificationFake = null;
+            String fakeCH = "-1";
+            if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.O) {
+                NotificationChannel channel = new NotificationChannel(fakeCH, "-1", NotificationManager
+                .IMPORTANCE_DEFAULT);
+                ((NotificationManager)getSystemService(Context.NOTIFICATION_SERVICE)).createNotificationChannel(channel);
+                notificationFake = new NotificationCompat.Builder(AlarmService.this, fakeCH);
+            }
+            notificationFake.setSmallIcon(R.drawable.ic_announcement_black_24dp)
+                    .setContentText("fake")
+                    .setContentTitle("fake");
+
+
+
+            return notificationFake;
+        }
         private boolean CheckComfort(int hour, int comfortA, int comfortB) {
             if (comfortA <= comfortB)
                 return comfortA <= hour && hour < comfortB;
             else
                 return comfortA <= hour || hour < comfortB;
         }
+
         public void checkNotify(MemoData memoData){
             String tempRandomTime = memoData.getRandomTime().substring(memoData.getRandomTime().length()-10,memoData.getRandomTime().length());
             Log.d("tempRT", tempRandomTime);
@@ -149,6 +168,9 @@ public class AlarmService extends Service {
 
 
                 }
+                //startForeground(-1,null);
+                //stopForeground(true);
+
                 if(memoData.getRandomTime().length() == 0){
 
                     //디비에서 지우기
@@ -170,8 +192,11 @@ public class AlarmService extends Service {
             Log.d("testHandler", "running");
             memoDataList = memoReposityDB.getStaticMemoDataList();
             optionData = memoReposityDB.getOptionData();
-            //startForeground(-1,null);
-            //stopForeground(true);
+
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O){
+                startForeground(-1, makeFakeNotification().build());
+                stopForeground(true);
+            }
 
             if(Build.VERSION.SDK_INT >= Build.VERSION_CODES.O){
 
