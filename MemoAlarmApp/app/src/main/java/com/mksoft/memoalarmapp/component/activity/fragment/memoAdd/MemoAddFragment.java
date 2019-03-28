@@ -44,6 +44,12 @@ public class MemoAddFragment extends Fragment {
         this.configureDagger();
 
     }
+    @Override
+    public void onResume() {
+        super.onResume();
+        titleData.setText("");
+        contentData.setText("");
+    }
     private void configureDagger(){
         AndroidSupportInjection.inject(this);
     }

@@ -42,7 +42,7 @@ public class AlarmService extends Service {
     //private ArrayList<String> tempRandomTime;
     SimpleDateFormat mFormat;
     String time;
-
+    NotificationCompat.Builder notificationFake = null;
 
     OptionData optionData;
 
@@ -91,7 +91,8 @@ public class AlarmService extends Service {
     class myServiceHandler extends Handler {
 
         private NotificationCompat.Builder makeFakeNotification(){
-            NotificationCompat.Builder notificationFake = null;
+            if(notificationFake != null)
+                return notificationFake;
             String fakeCH = "-1";
             if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.O) {
                 NotificationChannel channel = new NotificationChannel(fakeCH, "-1", NotificationManager

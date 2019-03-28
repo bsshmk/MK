@@ -204,7 +204,7 @@ public class MemoTimeSettingFragment extends Fragment {
 
 
 
-        //MD.setRandomTime("19032022161903202215");//수면 시작은 시간만
+        //MD.setRandomTime("19032818231903281822");//수면 시작은 시간만
 
 
            //년도가 너무 커지면 생성되는 랜덤사이즈가 너무 커진다.
