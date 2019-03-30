@@ -60,7 +60,7 @@ public class MemoTimeSettingFragment extends Fragment {
 
     NumberPicker np1;
     final String[] values = {"하루 2~3회", "하루 1~2회", "주 6~7회", "주 3회 미만"};
-    final int[] intervals = {3,5,12,24};
+    final int[] intervals = {2,4,13,23};
 
 
     private MemoViewModel memoViewModel;

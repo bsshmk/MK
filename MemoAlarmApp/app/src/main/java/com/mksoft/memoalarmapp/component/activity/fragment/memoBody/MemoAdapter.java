@@ -41,7 +41,6 @@ public class MemoAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder>{
 
     public MemoAdapter(Context context){
         this.context = context;
-
         this.memoSortFunction = new MemoSortFunction();
 
     }
