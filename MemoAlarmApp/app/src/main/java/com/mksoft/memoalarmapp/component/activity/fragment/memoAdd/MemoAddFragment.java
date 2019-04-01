@@ -11,16 +11,10 @@ import android.widget.EditText;
 import android.widget.LinearLayout;
 
 //import android.App.Fragment;
-import com.mksoft.memoalarmapp.HideKeyboard;
-import com.mksoft.memoalarmapp.ViewModel.MemoViewModel;
 import com.mksoft.memoalarmapp.component.activity.MainActivity;
 import com.mksoft.memoalarmapp.R;
 
-import javax.inject.Inject;
-
 import androidx.fragment.app.Fragment;
-import androidx.lifecycle.ViewModelProvider;
-import androidx.lifecycle.ViewModelProviders;
 import dagger.android.support.AndroidSupportInjection;
 
 public class MemoAddFragment extends Fragment {

@@ -7,7 +7,6 @@ import android.os.AsyncTask;
 import com.mksoft.memoalarmapp.DB.data.MemoData;
 import com.mksoft.memoalarmapp.DB.data.OptionData;
 
-import java.security.cert.PKIXRevocationChecker;
 import java.util.List;
 import java.util.concurrent.ExecutionException;
 
@@ -57,6 +56,7 @@ public class MemoReposityDB {
 
         @Override
         protected List<MemoData> doInBackground(Void... voids) {
+
 
             return asyncUserDao.getStaticAll();
         }

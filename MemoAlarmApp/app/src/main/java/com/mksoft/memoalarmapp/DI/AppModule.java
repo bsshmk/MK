@@ -1,29 +1,16 @@
 package com.mksoft.memoalarmapp.DI;
 
 
-import android.app.Activity;
 import android.app.Application;
-import android.app.NotificationChannel;
-import android.app.NotificationManager;
-import android.content.Context;
-import android.os.AsyncTask;
 
 import com.mksoft.memoalarmapp.DB.AppDB;
 import com.mksoft.memoalarmapp.DB.MemoDataDao;
 import com.mksoft.memoalarmapp.DB.MemoReposityDB;
 import com.mksoft.memoalarmapp.DB.OptionDataDao;
-import com.mksoft.memoalarmapp.DB.data.OptionData;
-import com.mksoft.memoalarmapp.HideKeyboard;
-import com.mksoft.memoalarmapp.R;
-import com.mksoft.memoalarmapp.component.service.Alarm.Service.AlarmService;
 
 import javax.inject.Singleton;
 
-import androidx.annotation.NonNull;
-import androidx.core.app.NotificationCompat;
 import androidx.room.Room;
-import androidx.room.RoomDatabase;
-import androidx.sqlite.db.SupportSQLiteDatabase;
 import dagger.Module;
 import dagger.Provides;
 
@@ -40,6 +27,7 @@ public class AppModule {
     AppDB provideDatabase(Application application) {
         return Room.databaseBuilder(application,
                 AppDB.class, "testDatabase.db")
+                .fallbackToDestructiveMigration()
                 .build();
     }
     @Provides

@@ -1,4 +1,4 @@
-package com.mksoft.memoalarmapp;
+package com.mksoft.memoalarmapp.otherMethod;
 
 import android.app.Activity;
 import android.view.View;

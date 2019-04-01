@@ -6,9 +6,8 @@ import android.os.Bundle;
 
 import com.mksoft.memoalarmapp.component.activity.fragment.MemoOverallSetting.MemoOverallSettingFragment;
 import com.mksoft.memoalarmapp.component.service.Alarm.Service.AlarmService;
-import com.mksoft.memoalarmapp.HideKeyboard;
+import com.mksoft.memoalarmapp.otherMethod.HideKeyboard;
 import com.mksoft.memoalarmapp.R;
-import com.mksoft.memoalarmapp.DB.data.MemoData;
 import com.mksoft.memoalarmapp.component.activity.fragment.memoAdd.MemoAddFragment;
 import com.mksoft.memoalarmapp.component.activity.fragment.memoBody.MemoBodyFragment;
 import com.mksoft.memoalarmapp.component.activity.fragment.memoTimeSetting.MemoTimeSettingFragment;
