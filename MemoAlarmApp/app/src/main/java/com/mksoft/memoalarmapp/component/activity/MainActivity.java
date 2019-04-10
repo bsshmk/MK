@@ -1,11 +1,12 @@
 package com.mksoft.memoalarmapp.component.activity;
 
-
 import android.content.Intent;
+import android.os.Build;
 import android.os.Bundle;
 
 import com.mksoft.memoalarmapp.component.activity.fragment.MemoOverallSetting.MemoOverallSettingFragment;
 import com.mksoft.memoalarmapp.component.service.Alarm.Service.AlarmService;
+import com.mksoft.memoalarmapp.component.service.Alarm.Service.RestartService;
 import com.mksoft.memoalarmapp.otherMethod.HideKeyboard;
 import com.mksoft.memoalarmapp.R;
 import com.mksoft.memoalarmapp.component.activity.fragment.memoAdd.MemoAddFragment;
@@ -21,7 +22,6 @@ import dagger.android.AndroidInjection;
 import dagger.android.DispatchingAndroidInjector;
 import dagger.android.support.HasSupportFragmentInjector;
 
-
 public class MainActivity extends AppCompatActivity  implements HasSupportFragmentInjector {
 
     MemoBodyFragment memoBodyFragment;
@@ -32,7 +32,6 @@ public class MainActivity extends AppCompatActivity  implements HasSupportFragme
 
     @Inject
     DispatchingAndroidInjector<Fragment> dispatchingAndroidInjector;
-
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -51,7 +50,6 @@ public class MainActivity extends AppCompatActivity  implements HasSupportFragme
         AndroidInjection.inject(this);
     }
 
-
     private void init(){
         hideKeyboard = new HideKeyboard(this);
         memoBodyFragment = new MemoBodyFragment();
@@ -59,10 +57,16 @@ public class MainActivity extends AppCompatActivity  implements HasSupportFragme
         getSupportFragmentManager().beginTransaction().replace(R.id.mainContainer, memoBodyFragment).commit();
     }
 
-
     public void startAlarmService(){
-        Intent intent = new Intent(this,AlarmService.class);
-        startService(intent);
+        //Intent intent = new Intent(this, AlarmService.class);
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+            Intent intent = new Intent(this, RestartService.class);
+            startForegroundService(intent);
+        }
+        else {
+            Intent intent = new Intent(this, AlarmService.class);
+            startService(intent);
+        }
     }
     public HideKeyboard getHideKeyboard(){
         return hideKeyboard;
@@ -91,6 +95,4 @@ public class MainActivity extends AppCompatActivity  implements HasSupportFragme
             }
         }
     }
-
-
 }
